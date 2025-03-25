@@ -1,6 +1,7 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
+
 /**
 * Clase para generar archivos de prueba pseudoaleatorios para el proyecto.
 * @author Angelo Hernández
@@ -73,3 +74,4 @@ public class GenerateInfoFiles {
        }
    }
 }
+
