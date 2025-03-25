@@ -1,0 +1,5 @@
+CC;1000000000;Ana;Gómez
+CE;1000000001;Eduardo;Pérez
+CC;1000000002;Carlos;Pérez
+CE;1000000003;Eduardo;Rodríguez
+CC;1000000004;Ana;Gómez
