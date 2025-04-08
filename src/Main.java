@@ -1,7 +1,9 @@
+//Librerías utilizadas:
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
+
 /**
 * Clase para generar archivos de reportes para el proyecto.
 * @author LUIS ANGELO HERNANDEZ BLANCO
@@ -10,6 +12,16 @@ import java.util.stream.*;
 */
 public class Main {
 
+     /**
+     * Método principal que procesa los archivos de ventas y genera reportes.
+     * 
+     * Flujo de ejecución:
+     * 1. Cargar productos desde products_info.csv
+     * 2. Leer archivos de ventas en la carpeta "sales"
+     * 3. Calcular ventas por vendedor y cantidad por producto
+     * 4. Generar reportes en la carpeta "reportes"
+     */
+         
     public static void main(String[] args) {
         try {
             // Cargar precios y nombres de productos para poder enlazarlos al reporte:
@@ -110,7 +122,7 @@ public class Main {
         }
     }
 
-    // Clase interna para manejar nombre y precio del producto
+    // Clase interna que representa un producto con nombre y precio
     static class Product {
         String name;
         double price;
