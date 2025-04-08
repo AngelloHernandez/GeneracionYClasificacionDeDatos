@@ -1,23 +1,76 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
 /**
-* Clase para generar archivos de prueba pseudoaleatorios para el proyecto.
-* @author Angelo Hernández
+* Clase para generar archivos de iniciación pseudoaleatorios para el proyecto.
+* @author LUIS ANGELO HERNANDEZ BLANCO
+* @author JEISSON LEANDRO GUERRERO MOLANO
+* @author CHRISTIAN CAMILO PEMBERTY VILLEGAS
 */
 public class GenerateInfoFiles {
-   private static final String[] FIRST_NAMES = {"Ana", "Carlos", "Diana", "Eduardo", "Fernanda"};
-   private static final String[] LAST_NAMES = {"Gómez", "López", "Martínez", "Rodríguez", "Pérez"};
-   private static final String[] PRODUCT_NAMES = {"Laptop", "Teléfono", "Tablet", "Monitor", "Teclado"};
+	//Lista de nombres para generar los archivos
+   private static final String[] FIRST_NAMES = {"Ana", "Carlos", "Diana", "Eduardo", "Fernanda", "Luis", "Marcela", "Hector", "Maria", "Camila", "Santiago", "Nicole", "Pedro", "Laura", "Ricardo", "Marcelo"};
+   //Lista de apellidos para generar los archivos
+   private static final String[] LAST_NAMES = {"Gómez", "López", "Martínez", "Rodríguez", "Pérez", "Hernández", "Fierro", "Orjuela", "Díaz", "Durán", "Leal", "Blanco", "Duarte"};
+   //Lista de productos para generar los archivos
+   private static final String[] PRODUCT_NAMES = {"Laptop", "Teléfono", "Tablet", "Monitor", "Teclado", "Mouse", "UPS", "Impresora", "SSD", "Dron"};
+   //Inicializamos la clase Random
    private static final Random random = new Random();
 
    public static void main(String[] args) {
        try {
-           // Generar archivos de prueba
+           // Generar archivos de alimentación
            createSalesManInfoFile(5);       // 5 vendedores
            createProductsFile(10);          // 10 productos
-           createSalesMenFile(3, "Juan", 123456789); // 3 ventas para Juan
+           
+           //Comprobamos si el archivo de vendedores se creó con exito
+           File file = new File("salesmen_info.csv");
+           if (!file.exists()) {
+               System.out.println("El archivo 'salesmen_info.csv' no existe.");
+               return;
+           }
+           
+           //leemos el archivo y pasamos por cada vendedor
+           try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+               String linea;
+               
+               // saltamos la primera linea
+               boolean esPrimeraLinea = true;
+
+               while ((linea = br.readLine()) != null) {
+                   if (esPrimeraLinea) {
+                       esPrimeraLinea = false; // Saltar encabezado
+                       continue;
+                   }
+                   // separamos los datos para obtener los valores
+                   String[] partes = linea.split(";");
+                   if (partes.length < 4) continue;
+                   
+                   //Obtenemos el nombre y el documento para pasar el parámentro a la función
+                   String nombre = partes[2].trim();
+                   long documento = Long.parseLong(partes[1].trim());
+
+                   // Número aleatorio de archivos de ventas por vendedor: entre 1 y 3
+                   int cantidadArchivos = 1 + new Random().nextInt(3);
+                   for (int i = 0; i < cantidadArchivos; i++) {
+                       // Número aleatorio de ventas por archivo: entre 2 y 6
+                       int ventas = 2 + new Random().nextInt(5);
+                       createSalesMenFile(ventas, nombre, documento);
+                   }
+               }
+
+               System.out.println("Ventas generadas exitosamente desde 'salesmen_info.csv'.");
+           } catch (IOException e) {
+               System.out.println("Error leyendo el archivo de vendedores.");
+               e.printStackTrace();
+           }
+           
+           // Llamada al método de la forma anterior para pruebas
+           //createSalesMenFile(3, "Juan", 123456789); // 3 ventas para Juan
            
            System.out.println("Archivos generados exitosamente.");
        } catch (IOException e) {
@@ -30,7 +83,9 @@ public class GenerateInfoFiles {
     * @param salesmanCount Número de vendedores a generar.
     */
    public static void createSalesManInfoFile(int salesmanCount) throws IOException {
-       try (FileWriter writer = new FileWriter("salesmen_info.txt")) {
+       try (FileWriter writer = new FileWriter("salesmen_info.csv")) {
+    	   // Crear encabezados
+           writer.write("Tipo Documento;Numero Documento;Nombres;Apellidos\n");
            for (int i = 0; i < salesmanCount; i++) {
                String docType = (i % 2 == 0) ? "CC" : "CE";
                long docNumber = 1000000000L + i;
@@ -46,7 +101,9 @@ public class GenerateInfoFiles {
     * @param productsCount Número de productos a generar.
     */
    public static void createProductsFile(int productsCount) throws IOException {
-       try (FileWriter writer = new FileWriter("products_info.txt")) {
+       try (FileWriter writer = new FileWriter("products_info.csv")) {
+    	   //Crear Encabezados
+           writer.write("ID;Nombre;Precio");
            for (int i = 1; i <= productsCount; i++) {
                String productName = PRODUCT_NAMES[random.nextInt(PRODUCT_NAMES.length)] + " " + i;
                double price = 50 + random.nextInt(500); // Precios entre 50 y 550
@@ -62,16 +119,40 @@ public class GenerateInfoFiles {
     * @param id Número de documento del vendedor.
     */
    public static void createSalesMenFile(int randomSalesCount, String name, long id) throws IOException {
-       String fileName = "sales_" + name + "_" + id + ".txt";
-       try (FileWriter writer = new FileWriter(fileName)) {
-           writer.write("CC;" + id + "\n"); // Cabecera con tipo y número de documento
-           
-           for (int i = 0; i < randomSalesCount; i++) {
-               String productId = "P" + (1 + random.nextInt(10)); // IDs de P1 a P10
-               int quantity = 1 + random.nextInt(10); // Cantidad entre 1 y 10
-               writer.write(String.format("%s;%d;\n", productId, quantity));
-           }
-       }
-   }
+	    File fdir = new File("sales");
+
+	    // Crear carpeta "sales" si no existe
+	    if (!fdir.exists()) {
+	        if (fdir.mkdirs()) {
+	            System.out.println("Carpeta 'sales' creada");
+	        } else {
+	            System.out.println("Falló la creación de la carpeta 'sales'");
+	            return;
+	        }
+	    }
+
+	    // Contar cuántos archivos existen para ese vendedor (que empiecen con el nombre y el id y terminen en .csv)
+	    String baseName = "sales_" + name + "_" + id;
+	    File[] existingFiles = fdir.listFiles((dir, filename) -> filename.startsWith(baseName) && filename.endsWith(".csv"));
+	    int index = (existingFiles != null) ? existingFiles.length : 0;
+
+	    // Crear el nuevo archivo con el índice correspondiente
+	    String fileName = "sales/" + baseName + "_" + index + ".csv";
+	    try (FileWriter writer = new FileWriter(fileName)) {
+	        writer.write("ID;Cantidad vendida\n");
+	        for (int i = 0; i < randomSalesCount; i++) {
+	            String productId = "P" + (1 + random.nextInt(10)); // P1 a P10
+	            int quantity = 1 + random.nextInt(10); // 1 a 10 unidades
+	            writer.write(String.format("%s;%d\n", productId, quantity));
+	        }
+	        System.out.println("Archivo creado: " + fileName);
+	    } catch (IOException e) {
+	        System.out.println("Error escribiendo archivo: " + fileName);
+	        e.printStackTrace();
+	    }
+	}
+
 }
+
+
 
