@@ -1,0 +1,4 @@
+Faltantes:
+
+1. Documentación
+2. Comentarios
