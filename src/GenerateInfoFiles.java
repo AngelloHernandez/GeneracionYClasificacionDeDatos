@@ -6,7 +6,19 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
-* Clase para generar archivos de iniciación pseudoaleatorios para el proyecto.
+* Clase para generar archivos de reportes para el proyecto.
+* Esta clase procesa los archivos de ventas, calcula las ventas por vendedor y las cantidades vendidas de productos,
+* luego genera los reportes correspondientes.
+* 
+* El flujo de ejecución de este proceso es el siguiente:
+* 1. Cargar los productos desde el archivo 'products_info.csv'.
+* 2. Leer los archivos de ventas desde la carpeta "sales".
+* 3. Calcular las ventas por vendedor y las cantidades por producto.
+* 4. Generar reportes con la información procesada.
+* 
+* El reporte generado contiene dos archivos:
+* reporte_ventas_vendedores.csv: Listado de ventas por vendedor.
+* productos_mas_vendidos.csv: Listado de productos más vendidos.
 * @author LUIS ANGELO HERNANDEZ BLANCO
 * @author JEISSON LEANDRO GUERRERO MOLANO
 * @author CHRISTIAN CAMILO PEMBERTY VILLEGAS
@@ -20,21 +32,29 @@ public class GenerateInfoFiles {
    private static final String[] PRODUCT_NAMES = {"Laptop", "Teléfono", "Tablet", "Monitor", "Teclado", "Mouse", "UPS", "Impresora", "SSD", "Dron"};
    //Inicializamos la clase Random
    private static final Random random = new Random();
+/**
+    * Método principal que genera los archivos de información necesarios para el proyecto.
+    * 
+    * Este método genera los archivos de vendedores y productos, además de crear los archivos
+    * de ventas aleatorias para cada vendedor.
+    * 
+    * @param args Argumentos de la línea de comandos (no utilizados en esta implementación).
+    */
 
    public static void main(String[] args) {
        try {
-           // Generar archivos de alimentación
+           // Aqui se generan los archivos de alimentación
            createSalesManInfoFile(5);       // 5 vendedores
            createProductsFile(10);          // 10 productos
            
-           //Comprobamos si el archivo de vendedores se creó con exito
+           //En esta parte comprobamos si el archivo de vendedores se creó con exito
            File file = new File("salesmen_info.csv");
            if (!file.exists()) {
                System.out.println("El archivo 'salesmen_info.csv' no existe.");
                return;
            }
            
-           //leemos el archivo y pasamos por cada vendedor
+           //Procedemos a leer el archivo y pasamos por cada vendedor
            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                String linea;
                
@@ -46,15 +66,15 @@ public class GenerateInfoFiles {
                        esPrimeraLinea = false; // Saltar encabezado
                        continue;
                    }
-                   // separamos los datos para obtener los valores
+                   // En esta parte separamos los datos para obtener los valores
                    String[] partes = linea.split(";");
                    if (partes.length < 4) continue;
                    
-                   //Obtenemos el nombre y el documento para pasar el parámentro a la función
+                   //con este obtenemos el nombre y el documento para pasar el parámentro a la función
                    String nombre = partes[2].trim();
                    long documento = Long.parseLong(partes[1].trim());
 
-                   // Número aleatorio de archivos de ventas por vendedor: entre 1 y 3
+                   // Generamos entre 1 y 3 archivos de ventas por vendedor.
                    int cantidadArchivos = 1 + new Random().nextInt(3);
                    for (int i = 0; i < cantidadArchivos; i++) {
                        // Número aleatorio de ventas por archivo: entre 2 y 6
@@ -79,7 +99,7 @@ public class GenerateInfoFiles {
    }
 
    /**
-    * Crea un archivo con información de vendedores.
+    * Aqui el codigo crea un archivo con información de vendedores.
     * @param salesmanCount Número de vendedores a generar.
     */
    public static void createSalesManInfoFile(int salesmanCount) throws IOException {
