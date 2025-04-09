@@ -12,33 +12,32 @@ import java.util.stream.*;
 */
 public class Main {
 
-     /**
-     * Método principal que procesa los archivos de ventas y genera reportes.
-     * 
-     * Flujo de ejecución:
-     * 1. Cargar productos desde products_info.csv
-     * 2. Leer archivos de ventas en la carpeta "sales"
-     * 3. Calcular ventas por vendedor y cantidad por producto
-     * 4. Generar reportes en la carpeta "reportes"
-     */
+/**
+ * Método principal que procesa los archivos de ventas y genera reportes.
+ * Este método realiza los siguientes pasos:
+ * 1. Cargar los productos desde el archivo 'products_info.csv' en un mapa.
+ * 2. Leer los archivos de ventas dentro de la carpeta "sales".
+ * 3. Para cada archivo de ventas, actualiza las ventas por vendedor y las cantidades por producto.
+ * 4. Genera los reportes en la carpeta "reportes", ordenando las ventas por vendedor y los productos más vendidos.
+ */
          
     public static void main(String[] args) {
         try {
-            // Cargar precios y nombres de productos para poder enlazarlos al reporte:
+            // Aqui se cargan los precios y nombres de productos para poder enlazarlos al reporte
             Map<String, Product> productMap = loadProducts("products_info.csv");
 
             // Mapas para acumular ventas
             Map<String, Double> vendedorVentas = new HashMap<>();
             Map<String, Integer> productoCantidad = new HashMap<>();
 
-            //Revisamos si la carpeta "sales" ya está creada para leer los archivos internos
+            //El codigo verifica si la carpeta "sales" ya está creada para leer los archivos internos
             File salesFolder = new File("sales");
             if (!salesFolder.exists()) {
                 System.err.println("La carpeta 'sales' no existe.");
                 return;
             }
 
-            //Recorremos cada archivo y validamos que tenga nombre y que sea un archivo "CSV"
+            //El codigo recorre cada archivo y validamos que tenga nombre y que sea un archivo "CSV"
             for (File salesFile : salesFolder.listFiles()) {
                 if (salesFile.isFile() && salesFile.getName().endsWith(".csv")) {
                     // Nombre del vendedor e ID del archivo
@@ -51,7 +50,7 @@ public class Main {
                     String indexFile = parts[2]; //no se usa
                     String keyVendedor = name + " " + id;
 
-                    // Leer las líneas del archivo (saltando cabecera)
+                    // Objetivo:Leer las líneas del archivo (saltando cabecera)
                     List<String> lines = Files.readAllLines(salesFile.toPath());
                     for (int i = 1; i < lines.size(); i++) {
                         String[] tokens = lines.get(i).split(";");
@@ -59,20 +58,20 @@ public class Main {
                         String productId = tokens[0];
                         int quantity = Integer.parseInt(tokens[1]);
 
-                        // Actualizar ventas por vendedor
+                        // TAREA:Actualizar ventas por vendedor
                         Product p = productMap.get(productId);
                         if (p != null) {
                             double total = p.price * quantity;
                             vendedorVentas.put(keyVendedor, vendedorVentas.getOrDefault(keyVendedor, 0.0) + total);
                         }
 
-                        // Actualizar cantidad vendida por producto
+                        // TAREA:Actualizar cantidad vendida por producto
                         productoCantidad.put(productId, productoCantidad.getOrDefault(productId, 0) + quantity);
                     }
                 }
             }
 
-            // Crear carpeta 'reportes' si no existe
+            // Primero crear carpeta 'reportes' si no existe
             File reportDir = new File("reportes");
             if (!reportDir.exists()) {
                 if (reportDir.mkdirs()) {
@@ -83,7 +82,7 @@ public class Main {
                 }
             }
 
-            // Crear archivo 1: reporte de ventas por vendedor
+            // Procede a crear archivo 1: reporte de ventas por vendedor
             try (FileWriter writer = new FileWriter("reportes/reporte_ventas_vendedores.csv")) {
                 writer.write("Nombre;Total vendido\n");
                 vendedorVentas.entrySet().stream()
@@ -97,7 +96,7 @@ public class Main {
                     });
             }
 
-            // Crear archivo 2: productos más vendidos
+            // Aqui el codigo crear archivo 2: productos más vendidos
             try (FileWriter writer = new FileWriter("reportes/productos_mas_vendidos.csv")) {
                 writer.write("Nombre;Precio;Cantidad\n");
                 productoCantidad.entrySet().stream()
@@ -122,7 +121,7 @@ public class Main {
         }
     }
 
-    // Clase interna que representa un producto con nombre y precio
+    // Esta clase interna que representa un producto con nombre y precio
     static class Product {
         String name;
         double price;
@@ -133,7 +132,7 @@ public class Main {
         }
     }
 
-    // Método para leer products_info.csv
+    // Este Método para leer products_info.csv
     private static Map<String, Product> loadProducts(String filename) throws IOException {
         Map<String, Product> products = new HashMap<>();
         List<String> lines = Files.readAllLines(Paths.get(filename));
