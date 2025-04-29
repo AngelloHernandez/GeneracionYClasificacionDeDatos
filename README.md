@@ -67,22 +67,28 @@ _(El punto de entrada del proyecto es la clase `Main`.)_
 
 ### `GenerateInfoFiles.java`
 
-- **Propósito**: Automatiza la generación de múltiples archivos de texto con datos ficticios para pruebas o entrenamiento de modelos.
-- **Funciones principales**:
-  - `generateNames()`: Genera nombres aleatorios.
-  - `generateEmails()`: Crea direcciones de correo simuladas.
-  - `generatePhoneNumbers()`: Genera números de teléfono válidos.
-  - `generateIDs()`: Crea números de identificación únicos.
-  - `generateFiles()`: Función principal que combina los métodos anteriores para escribir los datos en archivos.
+- **Propósito**: Genera archivos de texto `.txt` que contienen datos aleatorios, simulando registros de personas.
+- **Método principal**:
+  - `public static void generateInfo(int cantidadRegistros)`:
+    Genera un número especificado de registros (cantidad de líneas), cada uno compuesto por:
+    - Un nombre aleatorio.
+    - Una cédula aleatoria.
+    - Un número de teléfono aleatorio.
+    - Una dirección de correo aleatoria.
+- **Detalles del funcionamiento**:
+  - Usa arreglos predefinidos de nombres y apellidos para construir los nombres completos.
+  - Usa funciones auxiliares internas (no métodos separados) para:
+    - Generar números aleatorios para cédulas y teléfonos.
+    - Construir correos electrónicos basados en los nombres.
+  - Cada registro es escrito línea a línea en un archivo `info.txt`.
 
 ### `Main.java`
 
-- **Propósito**: Funciona como el controlador del programa.
-- **Responsabilidades**:
-  - Llama al método `generateFiles()` de la clase `GenerateInfoFiles`.
-  - Muestra mensajes en consola sobre el estado del proceso de generación.
-  - Controla la ejecución general del flujo del programa.
-
+- **Propósito**: Clase principal que ejecuta la generación de datos.
+- **Método principal**:
+  - `public static void main(String[] args)`:
+  - Llama a `GenerateInfoFiles.generateInfo(10)`, generando 10 registros aleatorios.
+  - Muestra un mensaje de éxito una vez terminado el proceso.
 ---
 
 ## 👥 Contribuidores
@@ -95,6 +101,22 @@ _(El punto de entrada del proyecto es la clase `Main`.)_
 
 ## 📄 Licencia
 
-Actualmente no se especifica una licencia para este proyecto.
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (C) 2025 Angello Hernández, Jleand13, Christian-Pemberty
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 ---
