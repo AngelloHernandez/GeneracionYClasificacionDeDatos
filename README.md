@@ -23,7 +23,7 @@ Este proyecto permite la **generación automática** de archivos de ventas simul
 
 ## 📚 Clases y Funciones
 
-### `GenerateInfoFiles`
+### 🗃 `GenerateInfoFiles`
 Clase que genera los datos de vendedores, productos y ventas aleatorias.
 
 | Método | Descripción |
@@ -35,7 +35,7 @@ Clase que genera los datos de vendedores, productos y ventas aleatorias.
 
 ---
 
-### `Main`
+### 🕹 `Main`
 Clase que procesa los archivos de ventas generados y crea los reportes.
 
 | Método | Descripción |
